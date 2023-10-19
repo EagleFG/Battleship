@@ -6,38 +6,74 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private Material[] _materials;
 
+    [SerializeField]
     private MeshRenderer _renderer;
+
+    enum TileColorStatus { Normal, Hovered, Confirmed, Rejected };
+    private TileColorStatus _status = TileColorStatus.Normal;
 
     public static event Action<Vector2Int> TileHasBeenSelected;
 
-    private void Awake()
+    private bool _isOccupied = false;
+
+    private bool _isInteractable = false;
+
+    public void SetTileColorStatus(int newStatus)
     {
-        if (TryGetComponent(out _renderer) == false)
-        {
-            Debug.LogError("Couldn't find Tile" + gameObject.name + "'s MeshRenderer");
-        }
+        _status = (TileColorStatus)newStatus;
+        SetMaterial(newStatus);
     }
 
     // To ensure proper material switching, material array should contain materials in this order:
-    // Default, Hovered, Confirmed, Rejected
-    public void SwitchMaterials(int materialIndex)
+    // Default = 0, Hovered = 1, Confirmed = 2, Rejected = 3
+    private void SetMaterial(int materialIndex)
     {
         _renderer.material = _materials[materialIndex];
     }
 
     private void OnMouseEnter()
     {
-        SwitchMaterials(1);
+        if (_isInteractable && _status == TileColorStatus.Normal)
+        {
+            SetTileColorStatus((int)TileColorStatus.Hovered);
+        }
     }
 
     private void OnMouseExit()
     {
-        SwitchMaterials(0);
+        if (_isInteractable && _status == TileColorStatus.Hovered)
+        {
+            SetTileColorStatus((int)TileColorStatus.Normal);
+        }
     }
 
+    // Broadcast this tile's location as an event when selected with the mouse
     private void OnMouseUpAsButton()
     {
-        TileHasBeenSelected?.Invoke(ConvertTileNameToPosition(gameObject.name));
+        if (_isInteractable)
+        {
+            TileHasBeenSelected?.Invoke(ConvertTileNameToPosition(gameObject.name));
+        }
+    }
+
+    public bool GetOccupiedStatus()
+    {
+        return _isOccupied;
+    }
+
+    public void SetOccupiedStatus(bool newStatus)
+    {
+        _isOccupied = newStatus;
+    }
+
+    public bool GetIsInteractable()
+    {
+        return _isInteractable;
+    }
+
+    public void SetIsInteractable(bool newValue)
+    {
+        _isInteractable = newValue;
     }
 
     public static string ConvertTilePositionToName(Vector2Int position)
