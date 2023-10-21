@@ -12,11 +12,11 @@ public class Tile : MonoBehaviour
     enum TileColorStatus { Normal, Hovered, Confirmed, Rejected };
     private TileColorStatus _status = TileColorStatus.Normal;
 
-    public static event Action<Vector2Int> TileHasBeenSelected;
-
-    private bool _isOccupied = false;
+    public static event Action<Tile> TileHasBeenSelected;
 
     private bool _isInteractable = false;
+    private bool _isOccupied = false;
+    private bool _hasBeenAttacked = false;
 
     public void SetTileColorStatus(int newStatus)
     {
@@ -52,7 +52,7 @@ public class Tile : MonoBehaviour
     {
         if (_isInteractable)
         {
-            TileHasBeenSelected?.Invoke(ConvertTileNameToPosition(gameObject.name));
+            TileHasBeenSelected?.Invoke(this);
         }
     }
 
@@ -64,6 +64,16 @@ public class Tile : MonoBehaviour
     public void SetOccupiedStatus(bool newStatus)
     {
         _isOccupied = newStatus;
+    }
+
+    public bool GetHasBeenAttacked()
+    {
+        return _hasBeenAttacked;
+    }
+
+    public void SetHasBeenAttacked(bool newValue)
+    {
+        _hasBeenAttacked = newValue;
     }
 
     public bool GetIsInteractable()

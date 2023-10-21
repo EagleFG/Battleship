@@ -106,9 +106,9 @@ public class PlacementIndicator : MonoBehaviour
         SetIndicatorStatus(IndicatorStatus.Rejected);
     }
 
-    private void ResetTile(Tile tile)
+    public void ResetTile(Tile tile)
     {
-        tile.SetTileColorStatus(0);
+        tile?.SetTileColorStatus(0);
     }
 
     public bool IsCurrentlyAssessedTilePlaceable()

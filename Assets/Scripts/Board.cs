@@ -12,9 +12,11 @@ public class Board : MonoBehaviour
     [SerializeField]
     private GameObject _tilePrefab;
 
-    private Dictionary<Vector2Int, Tile> _tiles;
+    private Dictionary<Vector2Int, Tile> _boardTiles;
 
     private bool _isBoardInteractable = false;
+
+    private bool _isInDebugView = false;
 
     private void Start()
     {
@@ -22,23 +24,16 @@ public class Board : MonoBehaviour
 
         SpawnTiles();
 
-        gameObject.transform.position = _boardStartingPosition.position;
-        gameObject.transform.eulerAngles = _boardStartingPosition.eulerAngles;
-    }
-
-    private void OnEnable()
-    {
-        Tile.TileHasBeenSelected += ReceiveSelectedTile;
-    }
-
-    private void OnDisable()
-    {
-        Tile.TileHasBeenSelected -= ReceiveSelectedTile;
+        if (_boardStartingPosition != null)
+        {
+            gameObject.transform.position = _boardStartingPosition.position;
+            gameObject.transform.eulerAngles = _boardStartingPosition.eulerAngles;
+        }
     }
 
     private void SpawnTiles()
     {
-        _tiles = new Dictionary<Vector2Int, Tile>();
+        _boardTiles = new Dictionary<Vector2Int, Tile>();
 
         for (int x = 0; x < _boardWidth; x++)
         {
@@ -55,27 +50,29 @@ public class Board : MonoBehaviour
                     Debug.LogError("Couldn't find Tile " + newTileObject.name + "'s Tile component upon spawning");
                 }
 
-                _tiles[new Vector2Int(x, z)] = newTile;
+                _boardTiles[new Vector2Int(x, z)] = newTile;
             }
-        }
-    }
-
-    private void ReceiveSelectedTile(Vector2Int position)
-    {
-        if (_isBoardInteractable == true)
-        {
-            GetTile(position).SetTileColorStatus(Random.Range(2,4));
         }
     }
 
     public Tile GetTile(Vector2Int position)
     {
-        if (_tiles.TryGetValue(position, out Tile tile) == false)
+        if (_boardTiles.TryGetValue(position, out Tile tile) == false)
         {
             Debug.LogError("Couldn't find selected tile");
         }
 
         return tile;
+    }
+
+    public int GetBoardWidth()
+    {
+        return _boardWidth;
+    }
+
+    public int GetBoardHeight()
+    {
+        return _boardHeight;
     }
 
     public bool GetIsBoardInteractable()
@@ -85,7 +82,7 @@ public class Board : MonoBehaviour
 
     public void SetIsBoardInteractable(bool newValue)
     {
-        foreach (Tile tile in _tiles.Values)
+        foreach (Tile tile in _boardTiles.Values)
         {
             tile.SetIsInteractable(newValue);
         }
@@ -99,5 +96,42 @@ public class Board : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.matrix = _boardStartingPosition.localToWorldMatrix;
         Gizmos.DrawWireCube(Vector3.zero, new Vector3(_boardWidth, 0, _boardHeight));
+    }
+
+    public void SwitchDebugViews()
+    {
+        if (_isInDebugView == false)
+        {
+            DebugViewOn();
+            _isInDebugView = true;
+        }
+        else
+        {
+            DebugViewOff();
+            _isInDebugView = false;
+        }
+    }
+
+    private void DebugViewOn()
+    {
+        foreach (Tile tile in _boardTiles.Values)
+        {
+            if (tile.GetOccupiedStatus() == false)
+            {
+                tile.SetTileColorStatus(2);
+            }
+            else
+            {
+                tile.SetTileColorStatus(3);
+            }
+        }
+    }
+
+    private void DebugViewOff()
+    {
+        foreach (Tile tile in _boardTiles.Values)
+        {
+            tile.SetTileColorStatus(0);
+        }
     }
 }

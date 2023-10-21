@@ -65,8 +65,14 @@ public class Piece : MonoBehaviour
 
         for (int i = 0; i < _segments.Length; i++)
         {
-            _segments[i].RemovePlacementOnBoard();
+            _segments[i].RemoveOccupiedTile();
             _segments[i].EnablePlacementIndicator();
+        }
+
+        // rotate the piece to the horizontal position if it's not already in the vertical position
+        if (gameObject.transform.eulerAngles.y != 270)
+        {
+            gameObject.transform.eulerAngles = Vector3.zero;
         }
 
         UpdateMousePosition();
@@ -76,6 +82,18 @@ public class Piece : MonoBehaviour
     private void DragPiece()
     {
         UpdateMousePosition();
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            if (gameObject.transform.eulerAngles.y == 0)
+            {
+                gameObject.transform.eulerAngles = new Vector3(0, 270, 0);
+            }
+            else
+            {
+                gameObject.transform.eulerAngles = Vector3.zero;
+            }
+        }
 
         if (_isDraggable)
         {
@@ -125,15 +143,18 @@ public class Piece : MonoBehaviour
 
     public void ResetPosition()
     {
-        gameObject.transform.position = _unplacedPosition.position;
-        gameObject.transform.rotation = _unplacedPosition.rotation;
+        if (_unplacedPosition != null)
+        {
+            gameObject.transform.position = _unplacedPosition.position;
+            gameObject.transform.rotation = _unplacedPosition.rotation;
+        }
     }
 
     private void PlacePiece()
     {
         for (int i = 0; i < _segments.Length; i++)
         {
-            _segments[i].SetPlacementOnBoard();
+            _segments[i].SetOccupiedTile();
         }
 
         float averageXPos = (_segments[0].GetOccupiedTile().gameObject.transform.position.x + _segments[_segments.Length - 1].GetOccupiedTile().gameObject.transform.position.x) / 2;

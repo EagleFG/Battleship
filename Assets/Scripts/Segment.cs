@@ -15,6 +15,7 @@ public class Segment : MonoBehaviour
 
     public void DisablePlacementIndicator()
     {
+        _placementIndicator.ResetTile(_placementIndicator.GetCurrentTileBeingAssessed());
         _placementIndicator.enabled = false;
     }
 
@@ -28,14 +29,14 @@ public class Segment : MonoBehaviour
         return _occupiedTile;
     }
 
-    public void SetPlacementOnBoard()
+    public void SetOccupiedTile()
     {
         _occupiedTile = _placementIndicator.GetCurrentTileBeingAssessed();
 
         _occupiedTile.SetOccupiedStatus(true);
     }
 
-    public void RemovePlacementOnBoard()
+    public void RemoveOccupiedTile()
     {
         if (_occupiedTile != null)
         {
