@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 199779137}
   - component: {fileID: 199779138}
   m_Layer: 0
-  m_Name: AudioManager
+  m_Name: BGM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,8 +375,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 410978458}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &199779138
 AudioSource:
@@ -508,10 +508,10 @@ RectTransform:
   m_Father: {fileID: 1514899638}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 750, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &228781722
 MonoBehaviour:
@@ -924,6 +924,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7690719b212f42344ab10ea3dc90452c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &410978457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 410978458}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &410978458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410978457}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 199779137}
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &449148647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,6 +1251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 546673519}
   - component: {fileID: 546673518}
+  - component: {fileID: 546673520}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1246,6 +1279,7 @@ MonoBehaviour:
   - {fileID: 3849579010087518777}
   - {fileID: 4291702152832495212}
   - {fileID: 5680921708264322097}
+  _opponentAI: {fileID: 546673520}
   _hitMarker: {fileID: 8563866584978954796, guid: 2d6251200467e8e4c953e2a508ee87b6, type: 3}
   _missMarker: {fileID: 8819498580064783919, guid: 592824d333c24dc498cd37015af4edcc, type: 3}
   _uiManager: {fileID: 1514899639}
@@ -1265,6 +1299,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &546673520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546673517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca7e50a0ff479f4991500ed28eccbd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &546899974
 GameObject:
   m_ObjectHideFlags: 3
@@ -1666,8 +1712,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardWidth: 10
   _boardHeight: 10
-  _boardStartingPosition: {fileID: 449148648}
   _boardOffsetPosition: {fileID: 1774142409}
+  _boardStartingPosition: {fileID: 449148648}
   _tilePrefab: {fileID: 6588284429861457482, guid: bd26d783d20c19745a48bcb56b174a80, type: 3}
 --- !u!1 &929135484
 GameObject:
@@ -2009,10 +2055,10 @@ RectTransform:
   m_Father: {fileID: 1514899638}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 750, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &991738095
 MonoBehaviour:
@@ -3697,8 +3743,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardWidth: 10
   _boardHeight: 10
-  _boardStartingPosition: {fileID: 1687475366}
   _boardOffsetPosition: {fileID: 1284374747}
+  _boardStartingPosition: {fileID: 1687475366}
   _tilePrefab: {fileID: 6588284429861457482, guid: bd26d783d20c19745a48bcb56b174a80, type: 3}
 --- !u!1 &2055113882
 GameObject:

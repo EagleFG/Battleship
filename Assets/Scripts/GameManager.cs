@@ -9,6 +9,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Piece[] _pieces;
 
+    private List<Tile> _tilesAICanAttack;
+
+    [SerializeField]
+    private OpponentAIBase _opponentAI;
+
     [SerializeField]
     private GameObject _hitMarker, _missMarker;
 
@@ -19,8 +24,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private CameraManager _cameraManager;
-
-    private List<Tile> _tilesAICanAttack;
 
     private void Awake()
     {
@@ -62,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < _pieces.Length; i++)
         {
-            _pieces[i].SetIsDraggable(newValue);
+            _pieces[i].isDraggable = newValue;
         }
     }
 
@@ -107,17 +110,17 @@ public class GameManager : MonoBehaviour
     private void AttackOpponentTile(Tile attackedTile)
     {
         // if the tile has been attacked before, do nothing
-        if (attackedTile.GetHasBeenAttacked() == true)
+        if (attackedTile.hasBeenAttacked == true)
         {
             return;
         }
 
-        attackedTile.SetHasBeenAttacked(true);
+        attackedTile.hasBeenAttacked = true;
 
         // if the tile is unoccupied, apply a miss marker
-        if (attackedTile.GetOccupiedStatus() == false)
+        if (attackedTile.isOccupied == false)
         {
-            ApplyMissMarkerToOpponentTile(attackedTile);
+            ApplyMissMarkerToTile(attackedTile);
 
             StartOpponentTurn();
         }
@@ -143,11 +146,11 @@ public class GameManager : MonoBehaviour
     {
         _opponentBoard.SetIsBoardInteractable(false);
 
-        Tile attackedTile = AIAttackPlayerTile();
+        Tile attackedTile = _opponentAI.ChooseTileToAttack(_tilesAICanAttack);
 
-        if (attackedTile.GetOccupiedStatus() == false)
+        if (attackedTile.isOccupied == false)
         {
-            ApplyMissMarkerToPlayerTile(attackedTile);
+            ApplyMissMarkerToTile(attackedTile);
 
             StartPlayerTurn();
         }
@@ -168,23 +171,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Tile AIAttackPlayerTile()
-    {
-        int randomChoice = Random.Range(0, _tilesAICanAttack.Count);
-
-        Tile attackedTile = _tilesAICanAttack[randomChoice];
-        _tilesAICanAttack.RemoveAt(randomChoice);
-
-        attackedTile.SetHasBeenAttacked(true);
-        return attackedTile;
-    }
-
     private void ApplyHitMarkerToOpponentTile(Tile tile)
     {
         GameObject newMarker = Instantiate(_hitMarker, tile.gameObject.transform);
 
         newMarker.transform.localPosition = new Vector3(0, 0, -.25f);
-        newMarker.transform.eulerAngles = new Vector3(-90, 0, 0);
+        newMarker.transform.localEulerAngles = new Vector3(-90, 0, 0);
     }
 
     private void ApplyHitMarkerToPlayerTile(Tile tile)
@@ -192,23 +184,15 @@ public class GameManager : MonoBehaviour
         GameObject newMarker = Instantiate(_hitMarker, tile.gameObject.transform);
 
         newMarker.transform.localPosition = new Vector3(0, 0, -.6f);
-        newMarker.transform.eulerAngles = new Vector3(0, 0, 0);
+        newMarker.transform.localEulerAngles = new Vector3(-90, 0, 0);
     }
 
-    private void ApplyMissMarkerToOpponentTile(Tile tile)
+    private void ApplyMissMarkerToTile(Tile tile)
     {
         GameObject newMarker = Instantiate(_missMarker, tile.gameObject.transform);
 
         newMarker.transform.localPosition = new Vector3(0, 0, -.25f);
-        newMarker.transform.eulerAngles = new Vector3(-90, 0, 0);
-    }
-
-    private void ApplyMissMarkerToPlayerTile(Tile tile)
-    {
-        GameObject newMarker = Instantiate(_missMarker, tile.gameObject.transform);
-
-        newMarker.transform.localPosition = new Vector3(0, 0, -.25f);
-        newMarker.transform.eulerAngles = new Vector3(0, 0, 0);
+        newMarker.transform.localEulerAngles = new Vector3(-90, 0, 0);
     }
 
     private void TriggerVictory()

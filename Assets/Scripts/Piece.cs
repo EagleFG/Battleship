@@ -9,7 +9,8 @@ public class Piece : MonoBehaviour
     [SerializeField]
     private Transform _unplacedPosition;
 
-    private bool _isDraggable = false;
+    [HideInInspector]
+    public bool isDraggable = false;
     private bool _isBeingDragged = false;
 
     private Vector3 _mouseOffset;
@@ -26,7 +27,7 @@ public class Piece : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (_isDraggable)
+        if (isDraggable)
         {
             PickUpPiece();
         }
@@ -48,16 +49,6 @@ public class Piece : MonoBehaviour
         }
     }
 
-    public bool GetIsDraggable()
-    {
-        return _isDraggable;
-    }
-
-    public void SetIsDraggable(bool newValue)
-    {
-        _isDraggable = newValue;
-    }
-
     private void PickUpPiece()
     {
         _isPlaced = false;
@@ -66,7 +57,7 @@ public class Piece : MonoBehaviour
         for (int i = 0; i < _segments.Length; i++)
         {
             _segments[i].RemoveOccupiedTile();
-            _segments[i].EnablePlacementIndicator();
+            _segments[i].SetIsAssessingTileBeneath(true);
         }
 
         // rotate the piece to the horizontal position if it's not already in the vertical position
@@ -95,10 +86,7 @@ public class Piece : MonoBehaviour
             }
         }
 
-        if (_isDraggable)
-        {
-            gameObject.transform.position = new Vector3(_mousePosition.x + _mouseOffset.x, gameObject.transform.position.y, _mousePosition.z + _mouseOffset.z);
-        }
+        gameObject.transform.position = new Vector3(_mousePosition.x + _mouseOffset.x, gameObject.transform.position.y, _mousePosition.z + _mouseOffset.z);
     }
 
     private void DropPiece()
@@ -125,7 +113,7 @@ public class Piece : MonoBehaviour
 
         for (int i = 0; i < _segments.Length; i++)
         {
-            _segments[i].DisablePlacementIndicator();
+            _segments[i].SetIsAssessingTileBeneath(false);
         }
 
         _isBeingDragged = false;

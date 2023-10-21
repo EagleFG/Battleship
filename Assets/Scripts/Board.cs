@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
     private int _boardWidth, _boardHeight;
 
     [SerializeField]
-    private Transform _boardStartingPosition, _boardOffsetPosition;
+    private Transform _boardOffsetPosition, _boardStartingPosition;
 
     [SerializeField]
     private GameObject _tilePrefab;
@@ -84,20 +84,13 @@ public class Board : MonoBehaviour
     {
         foreach (Tile tile in _boardTiles.Values)
         {
-            tile.SetIsInteractable(newValue);
+            tile.isInteractable = newValue;
         }
 
         _isBoardInteractable = newValue;
     }
 
-    // visualization of where the board will be after generation
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.matrix = _boardStartingPosition.localToWorldMatrix;
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(_boardWidth, 0, _boardHeight));
-    }
-
+    // called by button
     public void SwitchDebugViews()
     {
         if (_isInDebugView == false)
@@ -116,7 +109,7 @@ public class Board : MonoBehaviour
     {
         foreach (Tile tile in _boardTiles.Values)
         {
-            if (tile.GetOccupiedStatus() == false)
+            if (tile.isOccupied == false)
             {
                 tile.SetTileColorStatus(2);
             }
@@ -133,5 +126,13 @@ public class Board : MonoBehaviour
         {
             tile.SetTileColorStatus(0);
         }
+    }
+
+    // visualization of where the board will be after generation
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.matrix = _boardStartingPosition.localToWorldMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(_boardWidth, 0, _boardHeight));
     }
 }

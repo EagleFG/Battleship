@@ -14,9 +14,9 @@ public class Tile : MonoBehaviour
 
     public static event Action<Tile> TileHasBeenSelected;
 
-    private bool _isInteractable = false;
-    private bool _isOccupied = false;
-    private bool _hasBeenAttacked = false;
+    public bool isInteractable = false;
+    public bool isOccupied = false;
+    public bool hasBeenAttacked = false;
 
     public void SetTileColorStatus(int newStatus)
     {
@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (_isInteractable && _status == TileColorStatus.Normal)
+        if (isInteractable && _status == TileColorStatus.Normal)
         {
             SetTileColorStatus((int)TileColorStatus.Hovered);
         }
@@ -41,7 +41,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (_isInteractable && _status == TileColorStatus.Hovered)
+        if (isInteractable && _status == TileColorStatus.Hovered)
         {
             SetTileColorStatus((int)TileColorStatus.Normal);
         }
@@ -50,40 +50,10 @@ public class Tile : MonoBehaviour
     // Broadcast this tile's location as an event when selected with the mouse
     private void OnMouseUpAsButton()
     {
-        if (_isInteractable)
+        if (isInteractable)
         {
             TileHasBeenSelected?.Invoke(this);
         }
-    }
-
-    public bool GetOccupiedStatus()
-    {
-        return _isOccupied;
-    }
-
-    public void SetOccupiedStatus(bool newStatus)
-    {
-        _isOccupied = newStatus;
-    }
-
-    public bool GetHasBeenAttacked()
-    {
-        return _hasBeenAttacked;
-    }
-
-    public void SetHasBeenAttacked(bool newValue)
-    {
-        _hasBeenAttacked = newValue;
-    }
-
-    public bool GetIsInteractable()
-    {
-        return _isInteractable;
-    }
-
-    public void SetIsInteractable(bool newValue)
-    {
-        _isInteractable = newValue;
     }
 
     public static string ConvertTilePositionToName(Vector2Int position)

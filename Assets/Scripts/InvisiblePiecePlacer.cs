@@ -19,7 +19,7 @@ public abstract class InvisiblePiecePlacer : MonoBehaviour
 
         for (int i = 0; i < tilesToOccupy.Length; i++)
         {
-            tilesToOccupy[i].SetOccupiedStatus(true);
+            tilesToOccupy[i].isOccupied = true;
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class InvisiblePiecePlacer : MonoBehaviour
     {
         for (int i = 0; i < tilesToOccupy.Length; i++)
         {
-            if (tilesToOccupy[i].GetOccupiedStatus() == true)
+            if (tilesToOccupy[i].isOccupied == true)
             {
                 return false;
             }
