@@ -2,19 +2,19 @@
 The classic game of Battleship as a single-player game
 
 ## How to Play
-Press the start button
+- Press the start button
 
-Drag your pieces onto the board
-You can right-click while dragging pieces to switch between horizontal and vertical orientation
+- Drag your pieces onto the board
+  - You can right-click while dragging pieces to switch between horizontal and vertical orientation
 
-When all your pieces are placed, you can begin selecting tiles on the opponent's board to start attacking
-After each attack, the opponent will attack a tile on your board
+- When all your pieces are placed, you can begin selecting tiles on the opponent's board to start attacking
+  - After each attack, the opponent will attack a tile on your board
 
-Upon victory or defeat, you can press the restart button to play again
+- Upon victory or defeat, you can press the restart button to play again
 
-At any time, you can press the quit button to close the game
+- At any time, you can press the quit button to close the game
 
-The debug button shows which tiles on each board are occupied
+- The debug button shows which tiles on each board are occupied
 
 ## Classes
 ### Board
