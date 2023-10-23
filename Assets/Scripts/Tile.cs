@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    [HideInInspector]
+    public Board boardTileBelongsTo;
+
     [SerializeField]
     private Material[] _materials;
 
@@ -14,8 +17,8 @@ public class Tile : MonoBehaviour
 
     public static event Action<Tile> TileHasBeenSelected;
 
-    public bool isInteractable = false;
     public bool isOccupied = false;
+    public string occupyingPieceName = "";
     public bool hasBeenAttacked = false;
 
     public void SetTileColorStatus(int newStatus)
@@ -33,7 +36,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (isInteractable && _status == TileColorStatus.Normal)
+        if (boardTileBelongsTo.isBoardInteractable && _status == TileColorStatus.Normal)
         {
             SetTileColorStatus((int)TileColorStatus.Hovered);
         }
@@ -41,7 +44,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (isInteractable && _status == TileColorStatus.Hovered)
+        if (boardTileBelongsTo.isBoardInteractable && _status == TileColorStatus.Hovered)
         {
             SetTileColorStatus((int)TileColorStatus.Normal);
         }
@@ -50,7 +53,7 @@ public class Tile : MonoBehaviour
     // Broadcast this tile's location as an event when selected with the mouse
     private void OnMouseUpAsButton()
     {
-        if (isInteractable)
+        if (boardTileBelongsTo.isBoardInteractable)
         {
             TileHasBeenSelected?.Invoke(this);
         }
@@ -58,16 +61,16 @@ public class Tile : MonoBehaviour
 
     public static string ConvertTilePositionToName(Vector2Int position)
     {
-        string columnName = Convert.ToChar(position.x + 65).ToString();
-        string rowName = (position.y + 1).ToString();
+        string rowName = Convert.ToChar(position.y + 65).ToString();
+        string columnName = (position.x + 1).ToString();
 
-        return columnName + rowName;
+        return rowName + columnName;
     }
 
     public static Vector2Int ConvertTileNameToPosition(string name)
     {
-        int positionX = Convert.ToInt32(name[0]) - 65;
-        int positionY = int.Parse(name.Substring(1)) - 1;
+        int positionX = int.Parse(name.Substring(1)) - 1;
+        int positionY = Convert.ToInt32(name[0]) - 65;
 
         return new Vector2Int(positionX, positionY);
     }

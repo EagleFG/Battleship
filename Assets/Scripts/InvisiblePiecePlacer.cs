@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class InvisiblePiecePlacer : MonoBehaviour
 {
-    public static void PlacePiece(Board board, int numberOfSegments)
+    public static void PlacePiece(Board board, int numberOfSegments, string pieceName)
     {
         Tile[] tilesToOccupy = new Tile[numberOfSegments];
         bool isPlacementValid = false;
@@ -20,6 +20,7 @@ public abstract class InvisiblePiecePlacer : MonoBehaviour
         for (int i = 0; i < tilesToOccupy.Length; i++)
         {
             tilesToOccupy[i].isOccupied = true;
+            tilesToOccupy[i].occupyingPieceName = pieceName;
         }
     }
 

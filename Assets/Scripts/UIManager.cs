@@ -8,7 +8,13 @@ public class UIManager : MonoBehaviour
     private Button _startGameButton;
 
     [SerializeField]
-    private GameObject _piecePlacementUI, _victoryUI, _defeatUI;
+    private GameObject _piecePlacementUI;
+
+    [SerializeField]
+    private SunkPieceUI _sunkPieceUI;
+
+    [SerializeField]
+    private GameObject _victoryUI, _defeatUI;
 
     public void StartPiecePlacementPhaseUI()
     {
@@ -20,6 +26,13 @@ public class UIManager : MonoBehaviour
     public void StartTurnTakingPhaseUI()
     {
         _piecePlacementUI.SetActive(false);
+    }
+
+    public void TriggerSunkPieceUI(string nameOfSunkPiece)
+    {
+        _sunkPieceUI.gameObject.SetActive(true);
+
+        _sunkPieceUI.TriggerSunkPieceText(nameOfSunkPiece);
     }
 
     public void TriggerVictoryUI()

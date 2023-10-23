@@ -139,11 +139,12 @@ public class Segment : MonoBehaviour
         return _occupiedTile;
     }
 
-    public void SetOccupiedTile()
+    public void SetOccupiedTile(string pieceName)
     {
         _occupiedTile = _currentTileBeingAssessed;
 
         _occupiedTile.isOccupied = true;
+        _occupiedTile.occupyingPieceName = pieceName;
     }
 
     public void RemoveOccupiedTile()
@@ -151,6 +152,7 @@ public class Segment : MonoBehaviour
         if (_occupiedTile != null)
         {
             _occupiedTile.isOccupied = false;
+            _occupiedTile.occupyingPieceName = "";
 
             _occupiedTile = null;
         }

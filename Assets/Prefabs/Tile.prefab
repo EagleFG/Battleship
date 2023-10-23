@@ -111,9 +111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef44a683b52dc7547af41bb5603aad53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardTileBelongsTo: {fileID: 0}
   _materials:
   - {fileID: 2100000, guid: 455b285ae9acae34f96f7bcd0549ce8c, type: 2}
   - {fileID: 2100000, guid: 7142cf0ce501bfe4088983be099dedc1, type: 2}
   - {fileID: 2100000, guid: 2023ef29f9410ac41ae3f2c182169e05, type: 2}
   - {fileID: 2100000, guid: ea026bc822cc1e04ea3e8a89d9428778, type: 2}
   _renderer: {fileID: 6588284429861457480}
+  isOccupied: 0
+  occupyingPieceName: 
+  hasBeenAttacked: 0

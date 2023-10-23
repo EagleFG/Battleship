@@ -69,6 +69,7 @@ MonoBehaviour:
   - {fileID: 2394649899347575123}
   - {fileID: 2394649897850824890}
   _unplacedPosition: {fileID: 0}
+  isDraggable: 0
 --- !u!1001 &602670625063408327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76,6 +77,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 602670626403656901}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 6955165731003913203}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -161,6 +166,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 602670626403656901}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 6955165731003913203}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -246,6 +255,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 602670626403656901}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 6955165731003913203}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -331,6 +344,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 602670626403656901}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 6955165731003913203}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 3

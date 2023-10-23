@@ -142,7 +142,7 @@ public class Piece : MonoBehaviour
     {
         for (int i = 0; i < _segments.Length; i++)
         {
-            _segments[i].SetOccupiedTile();
+            _segments[i].SetOccupiedTile(gameObject.name);
         }
 
         float averageXPos = (_segments[0].GetOccupiedTile().gameObject.transform.position.x + _segments[_segments.Length - 1].GetOccupiedTile().gameObject.transform.position.x) / 2;

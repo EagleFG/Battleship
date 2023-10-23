@@ -31,21 +31,18 @@ Generates tiles and keeps track of them
 
 - Dictionary<Vector2Int, Tile> _boardTiles - a dictionary keeping track of every generated tile by its position
 
-- bool _isBoardInteractable - states whether the board's tiles can be interacted with by the mouse
+- public bool isBoardInteractable - states whether the board's tiles can be interacted with by the mouse
 
 - bool _isInDebugView - states whether the board is currently showing debug view
 
 **Functions**
 - void Start() - when the board is created, sets board offset, calls for the board to be generated, and moves the board to starting position
-- void SpawnTiles() - generates tiles and stores them in dictionary
+- void SpawnTiles() - generates tiles, assigns tile's board as self, stores tiles in dictionary
 
 - public Tile GetTile(Vector2Int) - returns Tile based on its location
 
 - public int GetBoardWidth() - returns board width
 - public int GetBoardHeight() - returns board height
-
-- public bool GetIsBoardInteractable() - returns whether board is interactable
-- public void SetIsBoardInteractable() - sets if board is interactable, propogates new setting to each tile
 
 - public void SwitchDebugViews() - called by UI button, switches between debug mode on and off
 - void DebugViewOn() - sets tile materials to show whether they're occupied
@@ -73,6 +70,9 @@ Dictates game state and keeps track of player scores
 
 - List<Tile> _tilesAICanAttack - list of tiles on the player's board that have not yet been attacked by the AI player
 
+- Dictionary<string, int> _playerPieces - keeps track of human player's pieces' health
+- Dictionary<string, int> _opponentPieces - keeps track of AI player's pieces' health
+
 - OpponentAIBase _opponentAI - class that determines the AI's decision-making process
 
 - GameObject _hitMarker - prefab generated when an attacked tile is a hit
@@ -85,9 +85,11 @@ Dictates game state and keeps track of player scores
 - CameraManager _cameraManager - manager of virtual cameras
 
 **Functions**
-- void Awake() - when game manager is created, instantiate list of tiles the AI player can attack
+- void Awake() - when game manager is created, instantiate list of tiles the AI player can attack and call to initialize player piece dictionaries
 - void OnEnable() - when game manager is enabled, listen for pieces being placed and tiles being selected
 - void OnDisable() - when game manager is disabled, stop listening for pieces being placed and tiles being selected
+
+- void InitializePlayerPieceDictionary(Dictionary<string, int>) - adds each piece with full health to the given player piece dictionary
 
 - public void StartPiecePlacementPhase() - sets the player's pieces to be interactable, places AI player's pieces, calls for UI change
 
@@ -101,9 +103,9 @@ Dictates game state and keeps track of player scores
 
 - void StartPlayerTurn() - sets the AI player's board to be interactable
 
-- void AttackOpponentTile(Tile) - when an unattacked tile is selected, determines if the attack is a miss or hit; generates marker, updates score, and checks if game is over; triggers victory or starts AI player's turn
+- void AttackOpponentTile(Tile) - when an unattacked tile is selected, determines if the attack is a miss or hit; generates marker, updates score, applies damage to AI player's piece, and checks if game is over; triggers victory or starts AI player's turn
 
-- void StartOpponentTurn() - sets the AI player's board to be uninteractable, calls AI to choose a tile to attack, determines if the attack is a miss or hit; generates marker, updates score, and checks if game is over; triggers victory or starts human player's turn
+- void StartOpponentTurn() - sets the AI player's board to be uninteractable, calls AI to choose a tile to attack, determines if the attack is a miss or hit; generates marker, updates score, applies damage to human player's score, and checks if game is over; triggers victory or starts human player's turn
 
 - void ApplyHitMarkerToOpponentTile(Tile) - generates hit marker on tile on AI player's board
 - void ApplyHitMarkerToPlayerTile(Tile) - generates hit marker on tile on human player's board
@@ -116,7 +118,7 @@ Dictates game state and keeps track of player scores
 Abstract class that places a piece onto a board by setting tiles as occupied
 
 **Functions**
-- public static void PlacePiece(Board, int) - on a given board, changes a given number of tiles in a line to be occupied after verifying that piece placement is valid
+- public static void PlacePiece(Board, int, string) - on a given board, changes a given number of tiles in a line to be occupied by a piece of a given name after verifying that piece placement is valid
 - static Tile[] TryPlacePiece(Board, int) - returns a line of tiles on a board that a piece of a given length could be placed on
 - static bool VerifyPlacementValidity(Tile[]) - verifies that the given tiles are all unoccupied
 
@@ -206,13 +208,27 @@ Tile-sized object that indicates whether the piece can be placed and communicate
 - public bool IsPlaceable() - returns whether segment can be placed
 
 - public Tile GetOccupiedTile() - returns the tile the segment is occupying
-- public void SetOccupiedTile() - sets occupied tile to the tile the segment is currently assessing, sets the tile as occupied
+- public void SetOccupiedTile() - sets occupied tile to the tile the segment is currently assessing, sets the tile as occupied, sets tile's occupying piece name
 - public void RemoveOccupiedTile() - sets the occupied tile as unoccupied, sets occupied tile to null
+
+### SunkPieceUI
+Sets the text and duration of the UI that appears announcing that an AI player's piece has been sunk
+
+**Variables**
+- TextMeshProUGUI _sunkPieceText - text component that can set what text is displayed
+- float _appearanceDuration - sets the duration that the UI will appear
+- float _disableStartTime - sets the start time that the duration should be counted from
+
+**Functions**
+- void Update() - constantly checks if it is time to disable the object
+- public void TriggerSunkPieceText(string) - resets the duration of the UI and sets the text to match the given piece name
 
 ### Tile
 Spaces that compose the game board, determines where pieces and markers can be placed
 
 **Variables**
+- public Board boardTileBelongsTo - the board the tile exists within
+
 - Material[] _materials - array of materials to be switched between
 - MeshRenderer _renderer - renderer whose material will be switched
 
@@ -221,8 +237,8 @@ Spaces that compose the game board, determines where pieces and markers can be p
 
 - public static event Action<Tile> TileHasBeenSelected - event to be called when the tile has been selected with the mouse
 
-- public bool isInteractable - determines whether the tile can be selected with the mouse
 - public bool isOccupied - states whether the tile is occupied
+- public string occupiedPieceType - name of the piece that occupies this tile
 - public bool hasBeenAttacked - states whether the tile has been attacked already
 
 **Functions**
@@ -243,6 +259,7 @@ Enables and disables UI elements, reloads the scene and quits the application
 - Button _startGameButton - button that starts the piece placement phase
 
 - GameObject _piecePlacementUI - UI that should show during the piece placement phase
+- SunkPieceUI _sunkPieceUI - UI that should show when an AI player's piece has been sunk
 - GameObject _victoryUI - UI that should show on victory
 - GameObject _defeatUI - UI that should show on defeat
 
@@ -250,8 +267,21 @@ Enables and disables UI elements, reloads the scene and quits the application
 - public void StartPiecePlacementPhaseUI() - disables start game button, enables piece placement UI
 - public void StartTurnTakingPhaseUI() - disables piece placement UI
 
+- public void TriggerSunkPieceUI(string) - enables sunk piece UI and gives it the name of the sunk piece
+
 - public void TriggerVitoryUI() - enables victory UI
 - public void TriggerDefeatUI() - enables defeat UI
 
 - public void ReloadScene() - reloads the scene
 - public void QuitGame() - quits the application
+
+## Possible Improvements
+Some ideas to improve, were this prototype to move forward
+
+- [x] Keep track of which pieces have been sunk instead of simply keeping overall score
+- [x] Have AI player announce when their piece has been sunk
+- [x] Change tile selectability to be a board property rather than iterating over every tile
+- [x] Correct tile generation to match tile names to board game's proper positioning, rather than having A1 be in the bottom left corner
+- [ ] Generate board based on position/rotation/scale of parent instead of having to move the board after generating tiles
+- [ ] Make opponent piece placement more deterministic rather than choosing a random place, checking validity, then choosing a random place again
+- [ ] Piece placement confirmation button instead of automatic game transition

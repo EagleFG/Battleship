@@ -14,13 +14,14 @@ public class Board : MonoBehaviour
 
     private Dictionary<Vector2Int, Tile> _boardTiles;
 
-    private bool _isBoardInteractable = false;
+    [HideInInspector]
+    public bool isBoardInteractable = false;
 
     private bool _isInDebugView = false;
 
     private void Start()
     {
-        _boardOffsetPosition.localPosition = new Vector3(-(float)_boardWidth / 2 + 0.5f, 0, -(float)_boardHeight / 2 + .5f);
+        _boardOffsetPosition.localPosition = new Vector3(-_boardWidth / 2f + 0.5f, 0, _boardHeight / 2f - .5f);
 
         SpawnTiles();
 
@@ -35,11 +36,11 @@ public class Board : MonoBehaviour
     {
         _boardTiles = new Dictionary<Vector2Int, Tile>();
 
-        for (int x = 0; x < _boardWidth; x++)
+        for (int z = 0; z < _boardHeight; z++)
         {
-            for (int z = 0; z < _boardHeight; z++)
+            for (int x = 0; x < _boardWidth; x++)
             {
-                GameObject newTileObject = Instantiate(_tilePrefab, new Vector3(_boardOffsetPosition.position.x + x, 0, _boardOffsetPosition.position.z + z), Quaternion.identity, _boardOffsetPosition);
+                GameObject newTileObject = Instantiate(_tilePrefab, new Vector3(_boardOffsetPosition.position.x + x, 0, _boardOffsetPosition.position.z - z), Quaternion.identity, _boardOffsetPosition);
 
                 newTileObject.transform.eulerAngles = new Vector3(90, 0, 0);
                 newTileObject.name = Tile.ConvertTilePositionToName(new Vector2Int(x, z));
@@ -50,6 +51,7 @@ public class Board : MonoBehaviour
                     Debug.LogError("Couldn't find Tile " + newTileObject.name + "'s Tile component upon spawning");
                 }
 
+                newTile.boardTileBelongsTo = this;
                 _boardTiles[new Vector2Int(x, z)] = newTile;
             }
         }
@@ -73,21 +75,6 @@ public class Board : MonoBehaviour
     public int GetBoardHeight()
     {
         return _boardHeight;
-    }
-
-    public bool GetIsBoardInteractable()
-    {
-        return _isBoardInteractable;
-    }
-
-    public void SetIsBoardInteractable(bool newValue)
-    {
-        foreach (Tile tile in _boardTiles.Values)
-        {
-            tile.isInteractable = newValue;
-        }
-
-        _isBoardInteractable = newValue;
     }
 
     // called by button

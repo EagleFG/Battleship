@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     private List<Tile> _tilesAICanAttack;
 
+    private Dictionary<string, int> _playerPieces = new Dictionary<string, int>();
+    private Dictionary<string, int> _opponentPieces = new Dictionary<string, int>();
+
     [SerializeField]
     private OpponentAIBase _opponentAI;
 
@@ -28,6 +31,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _tilesAICanAttack = new List<Tile>();
+
+        InitializePlayerPieceDictionary(_playerPieces);
+        InitializePlayerPieceDictionary(_opponentPieces);
     }
 
     private void OnEnable()
@@ -42,6 +48,15 @@ public class GameManager : MonoBehaviour
         Tile.TileHasBeenSelected -= AttackOpponentTile;
     }
 
+    private void InitializePlayerPieceDictionary(Dictionary<string, int> playerPiecesToInitialize)
+    {
+        playerPiecesToInitialize.Add("Aircraft Carrier", 5);
+        playerPiecesToInitialize.Add("Battleship", 4);
+        playerPiecesToInitialize.Add("Cruiser", 3);
+        playerPiecesToInitialize.Add("Submarine", 3);
+        playerPiecesToInitialize.Add("Destroyer", 2);
+    }
+
     // called from button
     public void StartPiecePlacementPhase()
     {
@@ -54,11 +69,11 @@ public class GameManager : MonoBehaviour
 
     private void PlaceOpponentPieces()
     {
-        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 5);
-        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 4);
-        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 3);
-        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 3);
-        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 2);
+        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 5, "Aircraft Carrier");
+        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 4, "Battleship");
+        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 3, "Cruiser");
+        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 3, "Submarine");
+        InvisiblePiecePlacer.PlacePiece(_opponentBoard, 2, "Destroyer");
     }
 
     private void SetPieceInteractability(bool newValue)
@@ -104,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        _opponentBoard.SetIsBoardInteractable(true);
+        _opponentBoard.isBoardInteractable = true;
     }
 
     private void AttackOpponentTile(Tile attackedTile)
@@ -129,7 +144,13 @@ public class GameManager : MonoBehaviour
         {
             ApplyHitMarkerToOpponentTile(attackedTile);
 
+            _opponentPieces[attackedTile.occupyingPieceName]--;
             _playerHitCount++;
+
+            if (_opponentPieces[attackedTile.occupyingPieceName] == 0)
+            {
+                _uiManager.TriggerSunkPieceUI(attackedTile.occupyingPieceName);
+            }
 
             if (_playerHitCount >= 17)
             {
@@ -144,7 +165,7 @@ public class GameManager : MonoBehaviour
 
     private void StartOpponentTurn()
     {
-        _opponentBoard.SetIsBoardInteractable(false);
+        _opponentBoard.isBoardInteractable = false;
 
         Tile attackedTile = _opponentAI.ChooseTileToAttack(_tilesAICanAttack);
 
@@ -158,7 +179,13 @@ public class GameManager : MonoBehaviour
         {
             ApplyHitMarkerToPlayerTile(attackedTile);
 
+            _playerPieces[attackedTile.occupyingPieceName]--;
             _opponentHitCount++;
+
+            if (_playerPieces[attackedTile.occupyingPieceName] == 0)
+            {
+                Debug.Log("The player's " + attackedTile.occupyingPieceName + " has been sunk!");
+            }
 
             if (_opponentHitCount == 17)
             {
@@ -197,14 +224,14 @@ public class GameManager : MonoBehaviour
 
     private void TriggerVictory()
     {
-        _opponentBoard.SetIsBoardInteractable(false);
+        _opponentBoard.isBoardInteractable = false;
 
         _uiManager.TriggerVictoryUI();
     }
 
     private void TriggerDefeat()
     {
-        _opponentBoard.SetIsBoardInteractable(false);
+        _opponentBoard.isBoardInteractable = false;
 
         _uiManager.TriggerDefeatUI();
     }

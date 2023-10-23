@@ -67,6 +67,7 @@ MonoBehaviour:
   - {fileID: 6015110516726473817}
   - {fileID: 6015110517747156669}
   _unplacedPosition: {fileID: 0}
+  isDraggable: 0
 --- !u!1001 &3118509549700659983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,6 +165,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8799870934503301931}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 198912602514666882}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -249,6 +254,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8799870934503301931}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 198912602514666882}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -334,6 +343,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8799870934503301931}
     m_Modifications:
+    - target: {fileID: 2983244256881506941, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
+      propertyPath: _pieceSegmentBelongsTo
+      value: 
+      objectReference: {fileID: 198912602514666882}
     - target: {fileID: 8990231000644090099, guid: c3e00f4d5680a7c41a5293177990120c, type: 3}
       propertyPath: m_RootOrder
       value: 3
